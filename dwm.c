@@ -2221,18 +2221,18 @@ bstack(Monitor *m) {
 		tw = m->ww / (n - m->nmaster);
 		ty = m->wy + mh;
 	} else {
-		mh = m->wh;
+		mh = m->wh - m->gappx;
 		tw = m->ww;
 		ty = m->wy;
 	}
 	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i < m->nmaster) {
-			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
-			resize(c, m->wx + mx, m->wy, w - (2 * c->bw), mh - (2 * c->bw), 0);
+			w = (m->ww - mx) / (MIN(n, m->nmaster) - i) - m->gappx;
+			resize(c, m->wx + mx + m->gappx, m->wy + m->gappx, w - (2 * c->bw) - m->gappx, mh - (2 * c->bw) - m->gappx, 0);
 			mx += WIDTH(c);
 		} else {
-			h = m->wh - mh;
-			resize(c, tx, ty, tw - (2 * c->bw), h - (2 * c->bw), 0);
+			h = m->wh - mh - m->gappx;
+			resize(c, tx + m->gappx, ty + m->gappx, tw - (2 * c->bw) - m->gappx, h - (2 * c->bw) - m->gappx, 0);
 			if (tw != m->ww)
 				tx += WIDTH(c);
 		}
@@ -2258,7 +2258,7 @@ bstackhoriz(Monitor *m) {
 	}
 	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i < m->nmaster) {
-			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
+			w = (m->ww - mx) / (MIN(n, m->nmaster) - i) - m->gappx;
 			resize(c, m->wx + mx, m->wy, w - (2 * c->bw), mh - (2 * c->bw), 0);
 			mx += WIDTH(c);
 		} else {
