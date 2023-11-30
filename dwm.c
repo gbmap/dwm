@@ -2218,23 +2218,23 @@ bstack(Monitor *m) {
 		return;
 	if (n > m->nmaster) {
 		mh = m->nmaster ? m->mfact * m->wh : 0;
-		tw = m->ww / (n - m->nmaster);
-		ty = m->wy + mh;
+		tw = m->ww / (n - m->nmaster) - m->gappx;
+		ty = m->wy + mh + m->gappx;
 	} else {
 		mh = m->wh - m->gappx;
-		tw = m->ww;
-		ty = m->wy;
+		tw = m->ww - m->gappx;
+		ty = m->wy + m->gappx;
 	}
 	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i < m->nmaster) {
 			w = (m->ww - mx) / (MIN(n, m->nmaster) - i) - m->gappx;
 			resize(c, m->wx + mx + m->gappx, m->wy + m->gappx, w - (2 * c->bw) - m->gappx, mh - (2 * c->bw) - m->gappx, 0);
-			mx += WIDTH(c);
+			mx += WIDTH(c) - m->gappx;
 		} else {
 			h = m->wh - mh - m->gappx;
 			resize(c, tx + m->gappx, ty + m->gappx, tw - (2 * c->bw) - m->gappx, h - (2 * c->bw) - m->gappx, 0);
 			if (tw != m->ww)
-				tx += WIDTH(c);
+				tx += WIDTH(c) + m->gappx;
 		}
 	}
 }
